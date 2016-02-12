@@ -1,2 +1,12 @@
 ---
-# defaults file for ec2-init
+ec2_key_name: "jsherman-2015-03-02"
+ec2_instance_profile_name: "lib-amz-default"
+ec2_image: "ami-8f0f4dea"
+ec2_vpc_subnet_id: "subnet-e09a5b97"
+ec2_tag_Name: "lib-amz-default-version_branch"
+ec2_tag_App: "Default"
+ec2_tag_Unit: "Default"
+ec2_tag_Workload: "Unprovisioned"
+ec2_instance_type: "t2.medium"
+ec2_volume_size: 64
+ec2_exact_count: '1'
