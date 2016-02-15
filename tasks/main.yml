@@ -10,7 +10,7 @@
     instance_tags:
       Name: "{{ec2_tag_Name}}"
       Unit: "{{ec2_tag_Unit}}"
-      Workload: "{{ec2_tag_Workload}}"
+      Workload: Unprovisioned
       App: "{{ec2_tag_App}}"
     exact_count: "{{ec2_exact_count}}"
     count_tag:
