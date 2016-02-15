@@ -36,4 +36,5 @@
   set_fact:
     server_tag_name: "{{ item.tags.Name }}"
     instance_id: "{{ item.id }}"
+    region: "{{ item.region }}"
   with_items: "{{ ec2.tagged_instances }}"
