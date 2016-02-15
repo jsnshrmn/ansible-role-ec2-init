@@ -9,4 +9,4 @@ ec2_tag_Unit: "Default"
 ec2_tag_Workload: "Unprovisioned"
 ec2_instance_type: "t2.medium"
 ec2_volume_size: 64
-ec2_exact_count: '1'
+ec2_exact_count: 1
