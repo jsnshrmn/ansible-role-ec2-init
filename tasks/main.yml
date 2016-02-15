@@ -8,14 +8,14 @@
     wait: yes
     group: ['Outbound Open', 'Inbound ssh lib-amz-broker']
     instance_tags:
-      Name: "{{ec2_tag_Name}}"
-      Unit: "{{ec2_tag_Unit}}"
+      Name: "{{ ec2_tag_Name }}"
+      Unit: "{{ ec2_tag_Unit }}"
       Workload: Unprovisioned
-      App: "{{ec2_tag_App}}"
-    exact_count: "{{ec2_exact_count}}"
+      App: "{{ ec2_tag_App }}"
+    exact_count: "{{ ec2_exact_count }}"
     count_tag:
-      App: "{{ec2_tag_App}}"
-      Workload: "{{ec2_tag_Workload}}"
+      App: "{{ ec2_tag_App }}"
+      Workload: "{{ ec2_tag_Workload }}"
     vpc_subnet_id: "{{ ec2_vpc_subnet_id }}"
     assign_public_ip: yes
     region: us-east-1
@@ -34,7 +34,7 @@
   when: ec2.changed == True
 - name: Set instance Name and ID as fact
   set_fact:
-    server_tag_name: "{{ item.tags.Name }}"
+    server_tag_name: "{{ ec2_tag_Name }}"
     instance_id: "{{ item.id }}"
     region: "{{ item.region }}"
   with_items: "{{ ec2.tagged_instances }}"
