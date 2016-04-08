@@ -11,9 +11,10 @@ Uses the EC2 module, so the boto package is required.
 Role Variables
 --------------
 
-See defaults/main.yml
+ec2_vpc_subnet_id: The VPC subnet to which you wish to deploy this machine
+ec2_key_name: The keypair name as listed in your aws console
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+For the rest, see defaults/main.yml
 
 Dependencies
 ------------
