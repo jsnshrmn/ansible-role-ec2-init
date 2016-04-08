@@ -5,6 +5,12 @@
     instance_type: "{{ ec2_instance_type }}"
     image: "{{ ec2_image }}"
     instance_profile_name: "{{ ec2_instance_profile_name }}"
+    user_data: |
+      #cloud-config
+      system_info:
+        default_user:
+          name: "{{ ec2_instance_default_user_name }}"
+          sudo: ALL=(ALL) NOPASSWD:ALL
     wait: yes
     group: ['Outbound Open', 'Inbound ssh lib-amz-broker']
     instance_tags:

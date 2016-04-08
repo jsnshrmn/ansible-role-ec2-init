@@ -1,5 +1,6 @@
 ---
 ec2_instance_profile_name: "lib-amz-default"
+ec2_instance_default_user_name: "centos"
 ec2_image: "ami-6d1c2007"
 ec2_tag_Name: "lib-amz-default-version_branch"
 ec2_tag_App: "Default"
