@@ -1,7 +1,20 @@
 ---
+- name: Set instance default user and key to 1st user in vars
+  set_fact:
+    ec2_instance_default_user_name: "{{ item.1.name }}"
+    ec2_key_name: "{{ item.1.keyname }}"
+    ec2_key_material: "{{ item.1.pubkey }}"
+  with_indexed_items: "{{ users }}"
+  when: item.0 == 0
+- name: ec2 key
+  ec2_key:
+    name: "{{ hostvars['localhost']['ec2_key_name'] }}"
+    key_material: "{{ hostvars['localhost']['ec2_key_material'] }}"
+    region: us-east-1
+    state: present
 - name: Launch instance
   ec2:
-    key_name: "{{ ec2_key_name }}"
+    key_name: "{{ hostvars['localhost']['ec2_key_name'] }}"
     instance_type: "{{ ec2_instance_type }}"
     image: "{{ ec2_image }}"
     instance_profile_name: "{{ ec2_instance_profile_name }}"
@@ -9,8 +22,7 @@
       #cloud-config
       system_info:
         default_user:
-          name: "{{ ec2_instance_default_user_name }}"
-          sudo: ALL=(ALL) NOPASSWD:ALL
+          name: "{{ hostvars['localhost']['ec2_instance_default_user_name'] }}"
     wait: yes
     group: ['Outbound Open', 'Inbound ssh lib-amz-broker']
     instance_tags:
