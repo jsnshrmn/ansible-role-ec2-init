@@ -1,4 +1,4 @@
-Role Name
+OULibraries.ec2-init
 =========
 
 OULibraries EC2 init.
@@ -10,6 +10,20 @@ Uses the EC2 module, so the boto package is required.
 
 Role Variables
 --------------
+You'll need to define one or more users in the 'users' var. eg.
+
+```
+users:
+  - name: 'centos'
+    groups: [centos, wheel]
+    keyname: 'aws-name-for-key'
+    pubkey: 'ssh-rsa somepubkey centos@example.org'
+  - name: 'centos1'
+    groups: 'wheel'
+    pubkey: 'ssh-rsa anotherpubkey centos@example.org'
+```
+
+the specified key will be added to aws if it isn't already there.
 
 ec2_vpc_subnet_id: The VPC subnet to which you wish to deploy this machine
 ec2_key_name: The keypair name as listed in your aws console
