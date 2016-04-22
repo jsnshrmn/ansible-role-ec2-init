@@ -53,6 +53,6 @@
     server_tag_name: "{{ ec2_tag_Name }}"
     server_tag_workload: "{{ ec2_tag_Workload }}"
     instance_id: "{{ item.id }}"
-    server_private_ip: "{{ item.private_ip }}"
+    server_ip: "{{ item.private_ip }}"
     region: "{{ item.region }}"
   with_items: "{{ ec2.tagged_instances }}"
