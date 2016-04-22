@@ -12,6 +12,8 @@
     key_material: "{{ hostvars['localhost']['ec2_key_material'] }}"
     region: us-east-1
     state: present
+- name: refresh inventory
+  meta: refresh_inventory
 - name: Launch instance
   ec2:
     key_name: "{{ hostvars['localhost']['ec2_key_name'] }}"
