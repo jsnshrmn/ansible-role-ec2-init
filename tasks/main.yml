@@ -12,6 +12,17 @@
     key_material: "{{ hostvars['localhost']['ec2_key_material'] }}"
     region: us-east-1
     state: present
+- name: Check for unprovisioned instances
+  ec2_remote_facts:
+    region: 'us-east-1'
+    filters:
+      instance-state-name: running
+      subnet-id: "{{ ec2_vpc_subnet_id }}"
+      "tag:Name": "{{ ec2_tag_Name }}"
+      "tag:Unit": "{{ ec2_tag_Unit }}"
+      "tag:Workload": Unprovisioned
+      "tag:App": "{{ ec2_tag_App }}"
+  register: ec2_pre_info
 - name: Launch instance
   ec2:
     key_name: "{{ hostvars['localhost']['ec2_key_name'] }}"
@@ -32,7 +43,7 @@
       App: "{{ ec2_tag_App }}"
     exact_count: "{{ ec2_exact_count }}"
     count_tag:
-      App: "{{ ec2_tag_Name }}"
+      Name: "{{ ec2_tag_Name }}"
     vpc_subnet_id: "{{ ec2_vpc_subnet_id }}"
     assign_public_ip: yes
     region: us-east-1
@@ -42,6 +53,7 @@
       volume_size: "{{ ec2_volume_size }}"
       delete_on_termination: true
   register: ec2
+  when: not ec2_pre_info.instances
 - name: Wait 3 minutes
   wait_for: timeout=180
   when: ec2.changed == True
@@ -59,7 +71,7 @@
       "tag:Unit": "{{ ec2_tag_Unit }}"
       "tag:Workload": Unprovisioned
       "tag:App": "{{ ec2_tag_App }}"
-  register: ec2_info
+  register: ec2_post_info
 - name: Set Name, intended workload, private_ip, region, and ID as fact
   set_fact:
     server_tag_name: "{{ ec2_tag_Name }}"
@@ -67,4 +79,4 @@
     instance_id: "{{ item.id }}"
     server_ip: "{{ item.private_ip_address }}"
     region: "{{ item.region }}"
-  with_items: "{{ ec2_info.instances }}"
+  with_items: "{{ ec2_post_info.instances }}"
