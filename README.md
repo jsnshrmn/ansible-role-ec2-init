@@ -6,7 +6,7 @@ OULibraries EC2 init.
 Requirements
 ------------
 
-Uses the EC2 module, so the boto package is required.
+Uses the EC2 module, so the boto package is required. Now requires Ansible 2.x
 
 Role Variables
 --------------
