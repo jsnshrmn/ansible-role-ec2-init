@@ -47,13 +47,13 @@
   wait_for: timeout=180
   when: ec2.changed == True
 - name: Add instance to host group
-  add_host: hostname={{ item.private_ip }} groupname=unprovisioned
-  with_items: ec2.instances
+  add_host: hostname={{ ec2_tag_Name }} groupname=ec2.unprovisioned
   when: ec2.changed == True
-- name: Set Name, intended workload, region, and ID as fact
+- name: Set Name, intended workload, private_ip, region, and ID as fact
   set_fact:
     server_tag_name: "{{ ec2_tag_Name }}"
     server_tag_workload: "{{ ec2_tag_Workload }}"
     instance_id: "{{ item.id }}"
+    server_private_ip: "{{ item.private_ip }}"
     region: "{{ item.region }}"
   with_items: "{{ ec2.tagged_instances }}"
