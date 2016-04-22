@@ -6,27 +6,27 @@ OULibraries EC2 init.
 Requirements
 ------------
 
-Uses the EC2 module, so the boto package is required.
+Uses the EC2 module, so the boto package is required. Now requires Ansible 2.x
 
 Role Variables
 --------------
-You'll need to define one or more users in the 'users' var. eg.
+You'll need to define at least one user in the 'users' var. eg.
 
 ```
 users:
   - name: 'centos'
-    groups: [centos, wheel]
+    groups: [wheel]
     keyname: 'aws-name-for-key'
     pubkey: 'ssh-rsa somepubkey centos@example.org'
-  - name: 'centos1'
-    groups: 'wheel'
-    pubkey: 'ssh-rsa anotherpubkey centos@example.org'
 ```
 
-the specified key will be added to aws if it isn't already there.
+The first user and key listed will be used to launch the instance. The first user's key key will be added to aws if it isn't already there.
 
-ec2_vpc_subnet_id: The VPC subnet to which you wish to deploy this machine
-ec2_key_name: The keypair name as listed in your aws console
+ec2_tag_name should be the internal dns name of your instance. Note that this means that you either need to implement your own dns in aws, or you'll need to wrangle hosts files. eg.
+
+```
+ec2_tag_Name: "app.workload.department.ec2.internal"
+```
 
 For the rest, see defaults/main.yml
 
@@ -52,4 +52,4 @@ TBD
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Jason Sherman

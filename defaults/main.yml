@@ -1,7 +1,8 @@
 ---
 ec2_instance_profile_name: "lib-amz-default"
 ec2_image: "ami-6d1c2007"
-ec2_tag_Name: "lib-amz-default-version_branch"
+ec2_region: "us-east-1"
+ec2_tag_Name: "app.workload.department.ec2.internal"
 ec2_tag_App: "Default"
 ec2_tag_Unit: "Default"
 ec2_tag_Workload: "Unprovisioned"
