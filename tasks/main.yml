@@ -47,7 +47,7 @@
 - name: Wait 3 minutes
   wait_for: timeout=180
   when: ec2.changed == True
-  - name: Add instance to host group
+- name: Add instance to host group
   add_host: hostname={{ ec2_tag_Name }}
     groupname=ec2.unprovisioned
   when: ec2.changed == True
