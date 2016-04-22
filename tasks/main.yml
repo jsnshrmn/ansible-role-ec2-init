@@ -14,7 +14,7 @@
     state: present
 - name: Check for unprovisioned instances
   ec2_remote_facts:
-    region: 'us-east-1'
+    region: "{{ ec2_region }}"
     filters:
       instance-state-name: running
       subnet-id: "{{ ec2_vpc_subnet_id }}"
@@ -63,7 +63,7 @@
   when: ec2.changed == True
 - name: Gather ec2 facts
   ec2_remote_facts:
-    region: 'us-east-1'
+    region: "{{ ec2_region }}"
     filters:
       instance-state-name: running
       subnet-id: "{{ ec2_vpc_subnet_id }}"
