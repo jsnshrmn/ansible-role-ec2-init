@@ -32,8 +32,7 @@
       App: "{{ ec2_tag_App }}"
     exact_count: "{{ ec2_exact_count }}"
     count_tag:
-      App: "{{ ec2_tag_App }}"
-      Workload: "{{ ec2_tag_Workload }}"
+      App: "{{ ec2_tag_Name }}"
     vpc_subnet_id: "{{ ec2_vpc_subnet_id }}"
     assign_public_ip: yes
     region: us-east-1
