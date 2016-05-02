@@ -15,7 +15,7 @@ You'll need to define at least one user in the 'users' var. eg.
 ```
 users:
   - name: 'centos'
-    groups: [wheel]
+    groups: 'wheel,apache'
     keyname: 'aws-name-for-key'
     pubkey: 'ssh-rsa somepubkey centos@example.org'
 ```
