@@ -28,6 +28,34 @@ ec2_tag_name should be the internal dns name of your instance. Note that this me
 ec2_tag_Name: "app.workload.department.ec2.internal"
 ```
 
+ec2_vpc_id: The VPC to which you wish to apply the security groups
+ec2_vpc_subnet_id: The VPC subnet to which you wish to deploy this machine
+ec2_security_group: a list of security group names to apply to this machine
+ec2_security_groups: the definition of the security groups you are using, eg.
+
+```
+ec2_security_groups:
+  - name: out_all
+    description: allow all outbound traffic
+    rules: []
+    rules_egress:
+      - proto: all
+        from_port: 0
+        to_port: 65535
+        cidr_ip: 0.0.0.0/0
+  - name: in_ssh_broker
+    description: allow inbound ssh from broker
+    rules:
+      - proto: tcp
+        from_port: 22
+        to_port: 22
+        cidr_ip: 192.168.1.10/32
+    rules_egress: []
+
+```
+See the docs for the ec2_group Ansible module for more info on managing groups.
+
+
 For the rest, see defaults/main.yml
 
 Dependencies
@@ -37,12 +65,6 @@ A list of other roles hosted on Galaxy should go here, plus any details in regar
 
 Example Playbook
 ----------------
-
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
 
 License
 -------

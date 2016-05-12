@@ -10,8 +10,20 @@
   ec2_key:
     name: "{{ hostvars['localhost']['ec2_key_name'] }}"
     key_material: "{{ hostvars['localhost']['ec2_key_material'] }}"
-    region: us-east-1
+    region: "{{ ec2_region }}"
     state: present
+
+- name: Configure EC2 Security Groups.
+  ec2_group:
+    name: "{{ item.name }}"
+    description: "{{ item.description }}"
+    region: "{{ ec2_region }}"
+    vpc_id: "{{ ec2_vpc_id }}"
+    state: present
+    rules: "{{ item.rules }}"
+    rules_egress: "{{ item.rules_egress }}"
+  with_items: ec2_security_groups
+
 - name: Check for unprovisioned instances
   ec2_remote_facts:
     region: "{{ ec2_region }}"
@@ -23,6 +35,7 @@
       "tag:Workload": Unprovisioned
       "tag:App": "{{ ec2_tag_App }}"
   register: ec2_pre_info
+
 - name: Launch instance
   ec2:
     key_name: "{{ hostvars['localhost']['ec2_key_name'] }}"
@@ -35,7 +48,7 @@
         default_user:
           name: "{{ hostvars['localhost']['ec2_instance_default_user_name'] }}"
     wait: yes
-    group: ['Outbound Open', 'Inbound ssh lib-amz-broker']
+    group: "{{ ec2_security_group }}"
     instance_tags:
       Name: "{{ ec2_tag_Name }}"
       Unit: "{{ ec2_tag_Unit }}"
@@ -46,7 +59,7 @@
       Name: "{{ ec2_tag_Name }}"
     vpc_subnet_id: "{{ ec2_vpc_subnet_id }}"
     assign_public_ip: yes
-    region: us-east-1
+    region: "{{ ec2_region }}"
     volumes:
     - device_name: /dev/sda1
       device_type: gp2
