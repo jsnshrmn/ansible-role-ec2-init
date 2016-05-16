@@ -61,9 +61,10 @@
   when: ec2.changed == True
 
 - name: Add instance to host group
-  add_host: hostname={{ ec2_tag_Name }}
+  add_host: hostname={{ item.ec2_tag_Name }}
     groupname=ec2.unprovisioned
   when: ec2.changed == True
+  with_items: ec2_instances
 
 - name: Gather ec2 facts
   ec2_remote_facts:
