@@ -59,10 +59,11 @@ ec2_security_group: a list of security group names to apply to this machine
 
 ```
 ec2_instances:
-  - ec2_tag_Name: app.workload.department.ec2.internal
-    ec2_tag_App: DefaultApp
-    ec2_tag_Unit: Default Unit
-    ec2_tag_Workload: Development
+  - ec2_tag_Name: app.dev.department.ec2.internal
+    ec2_tag_Environment: Development
+    ec2_tag_Product: Default
+    ec2_tag_Role: Default
+    ec2_tag_Unit: Default
     ec2_security_group: ['out_all', 'in_ssh_broker']
 ```
 
