@@ -80,7 +80,7 @@ Example Playbook
 License
 -------
 
-TBD
+[MIT](https://github.com/OULibraries/ansible-role-ec2-init/blob/master/LICENSE)
 
 Author Information
 ------------------
