@@ -26,14 +26,11 @@
 - name: Launch instance
   ec2:
     key_name: "{{ hostvars['localhost']['ec2_key_name'] }}"
-    instance_type: "{{ ec2_instance_type }}"
+    instance_type: "{{ item.ec2_instance_type }}"
+    private_ip: "{{ item.ec2_private_ip | default(omit) }}"
     image: "{{ ec2_image }}"
     instance_profile_name: "{{ ec2_instance_profile_name }}"
-    user_data: |
-      #cloud-config
-      system_info:
-        default_user:
-          name: "{{ hostvars['localhost']['ec2_instance_default_user_name'] }}"
+    user_data: "{{ item.ec2_user_data }}"
     wait: yes
     group: "{{ item.ec2_security_group }}"
     instance_tags:
@@ -49,11 +46,7 @@
     vpc_subnet_id: "{{ ec2_vpc_subnet_id }}"
     assign_public_ip: yes
     region: "{{ ec2_region }}"
-    volumes:
-    - device_name: /dev/sda1
-      device_type: gp2
-      volume_size: "{{ ec2_volume_size }}"
-      delete_on_termination: true
+    volumes: "{{ item.ec2_volumes }}"
   register: ec2
   with_items: ec2_instances
 
