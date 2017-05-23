@@ -19,8 +19,8 @@
   ec2_group:
     name: "{{ item.name }}"
     description: "{{ item.description }}"
-    region: "{{ ec2_region }}"
-    vpc_id: "{{ ec2_vpc_id }}"
+    region: "{{ ec2_default_region }}"
+    vpc_id: "{{ ec2_default_vpc_id }}"
     state: present
     rules: "{{ item.rules }}"
     rules_egress: "{{ item.rules_egress }}"
@@ -31,8 +31,8 @@
     key_name: "{{ hostvars['localhost']['ec2_key_name'] }}"
     instance_type: "{{ item.ec2_instance_type }}"
     private_ip: "{{ item.ec2_private_ip | default(omit) }}"
-    image: "{{ ec2_image }}"
-    instance_profile_name: "{{ ec2_instance_profile_name }}"
+    image: "{{ item.ec2_image | default(ec2_default_image) }}"
+    instance_profile_name: "{{ item.ec2_instance_profile_name | default(ec2_default_instance_profile_name) }}"
     user_data: "{{ item.ec2_user_data }}"
     wait: yes
     group: "{{ item.ec2_security_group }}"
@@ -43,13 +43,13 @@
       Role: "{{ item.ec2_tag_Role }}"
       Unit: "{{ item.ec2_tag_Unit }}"
       State: Unprovisioned
-    exact_count: "{{ ec2_exact_count }}"
+    exact_count: "{{ item.ec2_exact_count | default(ec2_default_exact_count) }}"
     count_tag:
       Name: "{{ item.ec2_tag_Name }}"
-    vpc_subnet_id: "{{ ec2_vpc_subnet_id }}"
+    vpc_subnet_id: "{{ item.ec2_vpc_subnet_id | default(ec2_default_vpc_subnet_id) }}"
     assign_public_ip: yes
-    region: "{{ ec2_region }}"
-    volumes: "{{ item.ec2_volumes }}"
+    region: "{{ item.ec2_region | default(ec2_default_region) }}"
+    volumes: "{{ item.ec2_volumes | default(ec2_default_volumes) }}"
   register: ec2
   with_items: "{{ ec2_instances }}"
 
@@ -62,7 +62,7 @@
     region: "{{ ec2_region }}"
     filters:
       instance-state-name: running
-      subnet-id: "{{ ec2_vpc_subnet_id }}"
+      subnet-id: "{{ ec2_default_vpc_subnet_id }}"
       "tag:State": Unprovisioned
   register: ec2_post_info
 
