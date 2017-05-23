@@ -12,7 +12,7 @@
   ec2_key:
     name: "{{ hostvars['localhost']['ec2_key_name'] }}"
     key_material: "{{ hostvars['localhost']['ec2_key_material'] }}"
-    region: "{{ ec2_region }}"
+    region: "{{ ec2_default_region }}"
     state: present
 
 - name: Configure EC2 Security Groups.
@@ -59,7 +59,7 @@
 
 - name: Gather ec2 facts
   ec2_remote_facts:
-    region: "{{ ec2_region }}"
+    region: "{{ ec2_default_region }}"
     filters:
       instance-state-name: running
       subnet-id: "{{ ec2_default_vpc_subnet_id }}"
