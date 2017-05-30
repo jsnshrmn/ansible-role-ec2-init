@@ -78,5 +78,5 @@
 
 - name: Set as local fact
   set_fact:
-    ec2_post_info: "{{ ec2_post_info.results }}"
+    ec2_post_info_accumulator: "{{ ec2_post_info_accumulator | default([]) }} + {{ ec2_post_info.results }}"
   when: ((ec2_post_info.results is defined) and (ec2_post_info.results is not none))
