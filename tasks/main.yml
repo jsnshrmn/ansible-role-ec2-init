@@ -1,5 +1,16 @@
 ---
 
+- name: Set instance default user and key to 1st user in vars
+  set_fact:
+    ec2_instance_default_user_name: "{{ item.1.name }}"
+    ec2_key_name: "{{ item.1.keyname }}"
+    ec2_key_material: "{{ item.1.pubkey }}"
+  when: (item.0 == 0)
+  with_indexed_items:
+    - "{{ users }}"
+  tags:
+  - ec2-init_ssh_key
+
 - include: us-east-1.yml
   when: ((aws_us_east_1 is defined) and (aws_us_east_1 is not none))
   become: true
