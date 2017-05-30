@@ -13,12 +13,10 @@
 
 - include: us-east-1.yml
   when: ((aws_us_east_1 is defined) and (aws_us_east_1 is not none))
-  become: true
   tags:
   - ec2-init_us_east_1
 
 - include: us-east-2.yml
   when: ((aws_us_east_2 is defined) and (aws_us_east_2 is not none))
-  become: true
   tags:
   - ec2-init_us_east_2
