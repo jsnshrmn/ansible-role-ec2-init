@@ -1,5 +1,6 @@
 ---
-ec2_default_instance_profile_name: "lib-amz-default"
+
+ec2_default_instance_profile_name: "default"
 
 ec2_default_image: "ami-6d1c2007"
 
