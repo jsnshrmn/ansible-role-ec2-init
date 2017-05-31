@@ -60,13 +60,6 @@
   with_items:
     - "{{ aws_us_east_1 }}"
 
-- debug:
-    msg: >
-      {{ item.1.tags.Name }}
-  with_subelements:
-    - "{{ ec2_post_info.results }}"
-    - instances
-
 - name: Add unprovisioned instances to host group
   add_host:
     hostname: "{{ item.1.tags.Name }}"
