@@ -1,0 +1,75 @@
+---
+
+- name: ec2 key
+  ec2_key:
+    name: "{{ hostvars['localhost']['ec2_key_name'] }}"
+    key_material: "{{ hostvars['localhost']['ec2_key_material'] }}"
+    region: us-east-2
+    state: present
+
+- name: Ensure US-East-2 Security Groups.
+  ec2_group:
+    name: "{{ item.1.name }}"
+    description: "{{ item.1.description }}"
+    region: us-east-2
+    vpc_id: "{{ item.0.vpc }}"
+    state: present
+    rules: "{{ item.1.rules }}"
+    rules_egress: "{{ item.1.rules_egress }}"
+  with_subelements:
+    - "{{ aws_us_east_2 }}"
+    - security_groups
+
+- name: Ensure US-East-2 instances
+  ec2:
+    key_name: "{{ hostvars['localhost']['ec2_key_name'] }}"
+    instance_type: "{{ item.1.type | default(ec2_default_instance_type) }}"
+    private_ip: "{{ item.1.private_ip | default(omit) }}"
+    image: "{{ item.1.image | default(ec2_default_image) }}"
+    instance_profile_name: "{{ item.1.profile_name | default(ec2_default_instance_profile_name) }}"
+    user_data: "{{ item.1.user_data | default(ec2_default_user_data) }}"
+    wait: yes
+    group: "{{ item.1.security_group }}"
+    instance_tags:
+      Name: "{{ item.1.name }}"
+      Environment: "{{ item.1.environment }}"
+      Product: "{{ item.1.product }}"
+      Role: "{{ item.1.role }}"
+      Unit: "{{ item.1.unit }}"
+      State: Unprovisioned
+    exact_count: "{{ item.1.exact_count | default(ec2_default_exact_count) }}"
+    count_tag:
+      Name: "{{ item.1.name }}"
+    vpc_subnet_id: "{{ item.0.subnet | default(ec2_default_vpc_subnet_id) }}"
+    assign_public_ip: yes
+    region: us-east-2
+    volumes: "{{ item.1.ec2_volumes | default(ec2_default_volumes) }}"
+  register: ec2
+  with_subelements:
+    - "{{ aws_us_east_2 }}"
+    - instances
+
+- name: Gather US-East-2 facts
+  ec2_remote_facts:
+    region: us-east-2
+    filters:
+      instance-state-name: running
+      subnet-id: "{{ item.subnet }}"
+      "tag:State": Unprovisioned
+  register: ec2_post_info
+  with_items:
+    - "{{ aws_us_east_2 }}"
+
+- name: Add unprovisioned instances to host group
+  add_host:
+    hostname: "{{ item.1.tags.Name }}"
+    groupname: "ec2.unprovisioned"
+  when: (item.1.tags.State == "Unprovisioned")
+  with_subelements:
+    - "{{ ec2_post_info.results }}"
+    - instances
+
+- name: Set as local fact
+  set_fact:
+    ec2_post_info_accumulator: "{{ ec2_post_info_accumulator | default([]) }} + {{ ec2_post_info.results }}"
+  when: ((ec2_post_info.results is defined) and (ec2_post_info.results is not none))
