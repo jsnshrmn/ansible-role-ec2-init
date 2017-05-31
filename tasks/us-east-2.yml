@@ -23,7 +23,7 @@
 - name: Ensure US-East-2 instances
   ec2:
     key_name: "{{ hostvars['localhost']['ec2_key_name'] }}"
-    instance_type: "{{ item.1.type }}"
+    instance_type: "{{ item.1.type | default(ec2_default_instance_type) }}"
     private_ip: "{{ item.1.private_ip | default(omit) }}"
     image: "{{ item.1.image | default(ec2_default_image) }}"
     instance_profile_name: "{{ item.1.profile_name | default(ec2_default_instance_profile_name) }}"
