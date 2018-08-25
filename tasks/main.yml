@@ -22,3 +22,15 @@
   when: ((aws_us_east_2 is defined) and (aws_us_east_2 is not none))
   tags:
   - ec2-init_us_east_2
+
+- include: us-west-1.yml
+  static: no
+  when: ((aws_us_west_1 is defined) and (aws_us_west_1 is not none))
+  tags:
+  - ec2-init_us_west_1
+
+- include: us-west-2.yml
+  static: no
+  when: ((aws_us_west_2 is defined) and (aws_us_west_2 is not none))
+  tags:
+  - ec2-init_us_west_2

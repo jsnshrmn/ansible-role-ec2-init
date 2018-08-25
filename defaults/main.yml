@@ -51,3 +51,7 @@ aws_us_east_1: !!null
 #                  cidr_ip: 0.0.0.0/0
 
 aws_us_east_2: !!null
+
+aws_us_west_1: !!null
+
+aws_us_west_2: !!null
